@@ -52,6 +52,11 @@ jobs:
           ls -lh addons/ffmpeg/windows/
           ls -lh addons/ffmpeg/macos/
 
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-0
+
       - name: Export Game
         id: export
         uses: firebelley/godot-export@v7.0.0
