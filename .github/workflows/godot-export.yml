@@ -91,6 +91,24 @@ jobs:
           archive_output: true
           cache: true
 
+      - name: Copy FFmpeg to Builds
+        run: |
+          echo "Copying ffmpeg binaries to exported builds..."
+
+          # Copy to Linux build
+          mkdir -p ${{ steps.export.outputs.build_directory }}/linux/addons/ffmpeg/linux/
+          cp addons/ffmpeg/linux/ffmpeg ${{ steps.export.outputs.build_directory }}/linux/addons/ffmpeg/linux/
+
+          # Copy to Windows build
+          mkdir -p ${{ steps.export.outputs.build_directory }}/windows/addons/ffmpeg/windows/
+          cp addons/ffmpeg/windows/ffmpeg.exe ${{ steps.export.outputs.build_directory }}/windows/addons/ffmpeg/windows/
+
+          # Copy to macOS build
+          mkdir -p "${{ steps.export.outputs.build_directory }}/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/macos/"
+          cp addons/ffmpeg/macos/ffmpeg "${{ steps.export.outputs.build_directory }}/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/macos/"
+
+          echo "FFmpeg binaries copied successfully"
+
       - name: Create Release
         uses: ncipollo/release-action@v1.18.0
         with:
