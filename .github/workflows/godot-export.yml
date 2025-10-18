@@ -91,23 +91,47 @@ jobs:
           archive_output: true
           cache: true
 
-      - name: Copy FFmpeg to Builds
+      - name: Add FFmpeg to Archives
         run: |
-          echo "Copying ffmpeg binaries to exported builds..."
+          echo "Adding ffmpeg binaries to release archives..."
+          cd ${{ steps.export.outputs.archive_directory }}
 
-          # Copy to Linux build
-          mkdir -p ${{ steps.export.outputs.build_directory }}/linux/addons/ffmpeg/linux/
-          cp addons/ffmpeg/linux/ffmpeg ${{ steps.export.outputs.build_directory }}/linux/addons/ffmpeg/linux/
+          # Process Linux archive
+          if [ -f "linux.zip" ]; then
+            echo "Processing Linux archive..."
+            unzip -q linux.zip -d linux_temp
+            mkdir -p linux_temp/addons/ffmpeg/linux/
+            cp ${{ github.workspace }}/addons/ffmpeg/linux/ffmpeg linux_temp/addons/ffmpeg/linux/
+            chmod +x linux_temp/addons/ffmpeg/linux/ffmpeg
+            cd linux_temp && zip -r -q ../linux.zip . && cd ..
+            rm -rf linux_temp
+            echo "Linux archive updated"
+          fi
 
-          # Copy to Windows build
-          mkdir -p ${{ steps.export.outputs.build_directory }}/windows/addons/ffmpeg/windows/
-          cp addons/ffmpeg/windows/ffmpeg.exe ${{ steps.export.outputs.build_directory }}/windows/addons/ffmpeg/windows/
+          # Process Windows archive
+          if [ -f "windows.zip" ]; then
+            echo "Processing Windows archive..."
+            unzip -q windows.zip -d windows_temp
+            mkdir -p windows_temp/addons/ffmpeg/windows/
+            cp ${{ github.workspace }}/addons/ffmpeg/windows/ffmpeg.exe windows_temp/addons/ffmpeg/windows/
+            cd windows_temp && zip -r -q ../windows.zip . && cd ..
+            rm -rf windows_temp
+            echo "Windows archive updated"
+          fi
 
-          # Copy to macOS build
-          mkdir -p "${{ steps.export.outputs.build_directory }}/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/macos/"
-          cp addons/ffmpeg/macos/ffmpeg "${{ steps.export.outputs.build_directory }}/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/macos/"
+          # Process macOS archive
+          if [ -f "macos.zip" ]; then
+            echo "Processing macOS archive..."
+            unzip -q macos.zip -d macos_temp
+            mkdir -p "macos_temp/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/macos/"
+            cp ${{ github.workspace }}/addons/ffmpeg/macos/ffmpeg "macos_temp/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/macos/"
+            chmod +x "macos_temp/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/macos/ffmpeg"
+            cd macos_temp && zip -r -q ../macos.zip . && cd ..
+            rm -rf macos_temp
+            echo "macOS archive updated"
+          fi
 
-          echo "FFmpeg binaries copied successfully"
+          echo "All archives updated with ffmpeg binaries"
 
       - name: Create Release
         uses: ncipollo/release-action@v1.18.0
