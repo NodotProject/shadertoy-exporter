@@ -93,66 +93,102 @@ jobs:
 
       - name: Add FFmpeg to Archives
         run: |
-          echo "Adding ffmpeg binaries to release archives..."
+          echo "=== Adding ffmpeg binaries to release archives ==="
+          echo "Archive directory: ${{ steps.export.outputs.archive_directory }}"
           cd ${{ steps.export.outputs.archive_directory }}
 
-          echo "Current directory contents:"
-          ls -lh
+          echo "=== Current directory: $(pwd) ==="
+          echo "=== All files in archive directory:"
+          find . -type f -ls
 
           # Process Linux archive
-          if [ -f "linux.zip" ]; then
-            echo "Processing Linux archive..."
-            unzip -q linux.zip -d linux_temp
-            echo "Contents of linux_temp:"
-            ls -la linux_temp/
-            mkdir -p linux_temp/addons/ffmpeg/linux/
-            cp ${{ github.workspace }}/addons/ffmpeg/linux/ffmpeg linux_temp/addons/ffmpeg/linux/
-            chmod +x linux_temp/addons/ffmpeg/linux/ffmpeg
-            echo "FFmpeg added to linux_temp, re-zipping..."
-            rm -f linux.zip
-            cd linux_temp && zip -r ../linux.zip . && cd ..
-            rm -rf linux_temp
-            echo "Linux archive updated"
-            echo "New linux.zip size:"
-            ls -lh linux.zip
-          fi
+          for archive in *.zip; do
+            if [[ "$archive" == *"inux"* ]] || [[ "$archive" == *"Linux"* ]] || [[ "$archive" == "linux.zip" ]]; then
+              echo "=== Processing Linux archive: $archive ==="
+              echo "Original size: $(ls -lh "$archive" | awk '{print $5}')"
+
+              unzip -l "$archive" | head -30
+
+              unzip -q "$archive" -d linux_temp
+              echo "Contents of linux_temp root:"
+              ls -la linux_temp/
+
+              mkdir -p linux_temp/addons/ffmpeg/linux/
+              cp ${{ github.workspace }}/addons/ffmpeg/linux/ffmpeg linux_temp/addons/ffmpeg/linux/
+              chmod +x linux_temp/addons/ffmpeg/linux/ffmpeg
+              ls -lh linux_temp/addons/ffmpeg/linux/
+
+              rm -f "$archive"
+              cd linux_temp && zip -r "../$archive" . && cd ..
+              echo "New size: $(ls -lh "$archive" | awk '{print $5}')"
+              echo "Verifying ffmpeg in archive:"
+              unzip -l "$archive" | grep -i ffmpeg || echo "WARNING: ffmpeg not found in archive!"
+              rm -rf linux_temp
+            fi
+          done
 
           # Process Windows archive
-          if [ -f "windows.zip" ]; then
-            echo "Processing Windows archive..."
-            unzip -q windows.zip -d windows_temp
-            echo "Contents of windows_temp:"
-            ls -la windows_temp/
-            mkdir -p windows_temp/addons/ffmpeg/windows/
-            cp ${{ github.workspace }}/addons/ffmpeg/windows/ffmpeg.exe windows_temp/addons/ffmpeg/windows/
-            echo "FFmpeg added to windows_temp, re-zipping..."
-            rm -f windows.zip
-            cd windows_temp && zip -r ../windows.zip . && cd ..
-            rm -rf windows_temp
-            echo "Windows archive updated"
-            echo "New windows.zip size:"
-            ls -lh windows.zip
-          fi
+          for archive in *.zip; do
+            if [[ "$archive" == *"indows"* ]] || [[ "$archive" == *"Windows"* ]] || [[ "$archive" == *"win"* ]] || [[ "$archive" == "windows.zip" ]]; then
+              echo "=== Processing Windows archive: $archive ==="
+              echo "Original size: $(ls -lh "$archive" | awk '{print $5}')"
+
+              unzip -l "$archive" | head -30
+
+              unzip -q "$archive" -d windows_temp
+              echo "Contents of windows_temp root:"
+              ls -la windows_temp/
+
+              mkdir -p windows_temp/addons/ffmpeg/windows/
+              cp ${{ github.workspace }}/addons/ffmpeg/windows/ffmpeg.exe windows_temp/addons/ffmpeg/windows/
+              ls -lh windows_temp/addons/ffmpeg/windows/
+
+              rm -f "$archive"
+              cd windows_temp && zip -r "../$archive" . && cd ..
+              echo "New size: $(ls -lh "$archive" | awk '{print $5}')"
+              echo "Verifying ffmpeg in archive:"
+              unzip -l "$archive" | grep -i ffmpeg || echo "WARNING: ffmpeg not found in archive!"
+              rm -rf windows_temp
+            fi
+          done
 
           # Process macOS archive
-          if [ -f "macos.zip" ]; then
-            echo "Processing macOS archive..."
-            unzip -q macos.zip -d macos_temp
-            echo "Contents of macos_temp:"
-            ls -la macos_temp/
-            mkdir -p "macos_temp/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/macos/"
-            cp ${{ github.workspace }}/addons/ffmpeg/macos/ffmpeg "macos_temp/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/macos/"
-            chmod +x "macos_temp/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/macos/ffmpeg"
-            echo "FFmpeg added to macos_temp, re-zipping..."
-            rm -f macos.zip
-            cd macos_temp && zip -r ../macos.zip . && cd ..
-            rm -rf macos_temp
-            echo "macOS archive updated"
-            echo "New macos.zip size:"
-            ls -lh macos.zip
-          fi
+          for archive in *.zip; do
+            if [[ "$archive" == *"acOS"* ]] || [[ "$archive" == *"macos"* ]] || [[ "$archive" == *"osx"* ]] || [[ "$archive" == "macos.zip" ]]; then
+              echo "=== Processing macOS archive: $archive ==="
+              echo "Original size: $(ls -lh "$archive" | awk '{print $5}')"
 
-          echo "All archives updated with ffmpeg binaries"
+              unzip -l "$archive" | head -30
+
+              unzip -q "$archive" -d macos_temp
+              echo "Contents of macos_temp root:"
+              ls -la macos_temp/
+
+              # Try to find the .app bundle
+              APP_PATH=$(find macos_temp -name "*.app" -type d | head -1)
+              if [ -n "$APP_PATH" ]; then
+                echo "Found app bundle: $APP_PATH"
+                mkdir -p "$APP_PATH/Contents/Resources/addons/ffmpeg/macos/"
+                cp ${{ github.workspace }}/addons/ffmpeg/macos/ffmpeg "$APP_PATH/Contents/Resources/addons/ffmpeg/macos/"
+                chmod +x "$APP_PATH/Contents/Resources/addons/ffmpeg/macos/ffmpeg"
+                ls -lh "$APP_PATH/Contents/Resources/addons/ffmpeg/macos/"
+              else
+                echo "WARNING: No .app bundle found, placing ffmpeg at root"
+                mkdir -p macos_temp/addons/ffmpeg/macos/
+                cp ${{ github.workspace }}/addons/ffmpeg/macos/ffmpeg macos_temp/addons/ffmpeg/macos/
+                chmod +x macos_temp/addons/ffmpeg/macos/ffmpeg
+              fi
+
+              rm -f "$archive"
+              cd macos_temp && zip -r "../$archive" . && cd ..
+              echo "New size: $(ls -lh "$archive" | awk '{print $5}')"
+              echo "Verifying ffmpeg in archive:"
+              unzip -l "$archive" | grep -i ffmpeg || echo "WARNING: ffmpeg not found in archive!"
+              rm -rf macos_temp
+            fi
+          done
+
+          echo "=== All archives processed ==="
           echo "Final archive directory contents:"
           ls -lh
 
