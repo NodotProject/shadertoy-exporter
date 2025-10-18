@@ -1,0 +1,37 @@
+FFmpeg License Information
+==========================
+
+This software includes FFmpeg binaries, which are licensed under the
+GNU General Public License version 3 (GPLv3).
+
+FFmpeg is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 3 of the License, or (at your option)
+any later version.
+
+FFmpeg is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+For the full text of the GPLv3 license, see:
+https://www.gnu.org/licenses/gpl-3.0.html
+
+Source Code Availability
+------------------------
+In compliance with the GPLv3 license, the source code for FFmpeg is available at:
+https://github.com/FFmpeg/FFmpeg
+
+FFmpeg Binary Sources
+---------------------
+The FFmpeg binaries distributed with this application were obtained from:
+
+- Linux (x86_64): https://johnvansickle.com/ffmpeg/
+  Static builds by John Van Sickle
+
+- Windows (x86_64): https://www.gyan.dev/ffmpeg/builds/
+  Builds by Gyan Doshi
+
+- macOS (Universal): https://evermeet.cx/ffmpeg/
+  Builds by evermeet.cx
+
+For more information about FFmpeg, visit: https://ffmpeg.org/

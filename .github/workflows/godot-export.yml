@@ -42,6 +42,9 @@ jobs:
           tar xf ffmpeg-release-amd64-static.tar.xz
           cp ffmpeg-*-amd64-static/ffmpeg addons/ffmpeg/linux/
           chmod +x addons/ffmpeg/linux/ffmpeg
+          # Copy license/readme files if they exist
+          cp ffmpeg-*-amd64-static/GPLv3.txt addons/ffmpeg/linux/ 2>/dev/null || true
+          cp ffmpeg-*-amd64-static/readme.txt addons/ffmpeg/linux/ 2>/dev/null || true
           rm -rf ffmpeg-release-amd64-static.tar.xz ffmpeg-*-amd64-static
           echo "Linux ffmpeg bundled"
 
@@ -52,6 +55,9 @@ jobs:
           wget https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
           unzip -q ffmpeg-release-essentials.zip
           cp ffmpeg-*-essentials_build/bin/ffmpeg.exe addons/ffmpeg/windows/
+          # Copy license/readme files if they exist
+          cp ffmpeg-*-essentials_build/LICENSE addons/ffmpeg/windows/ 2>/dev/null || true
+          cp ffmpeg-*-essentials_build/README.txt addons/ffmpeg/windows/ 2>/dev/null || true
           rm -rf ffmpeg-release-essentials.zip ffmpeg-*-essentials_build
           echo "Windows ffmpeg bundled"
 
@@ -63,6 +69,8 @@ jobs:
           unzip -q ffmpeg-7.1.zip
           mv ffmpeg addons/ffmpeg/macos/
           chmod +x addons/ffmpeg/macos/ffmpeg
+          # evermeet.cx builds are GPLv3, create a note about it
+          echo "This FFmpeg binary is licensed under GPLv3. See FFMPEG_LICENSE.txt for details." > addons/ffmpeg/macos/LICENSE.txt
           rm -rf ffmpeg-7.1.zip
           echo "macOS ffmpeg bundled"
 
@@ -116,6 +124,9 @@ jobs:
               mkdir -p linux_temp/addons/ffmpeg/linux/
               cp ${{ github.workspace }}/addons/ffmpeg/linux/ffmpeg linux_temp/addons/ffmpeg/linux/
               chmod +x linux_temp/addons/ffmpeg/linux/ffmpeg
+              # Copy license files
+              cp ${{ github.workspace }}/addons/ffmpeg/FFMPEG_LICENSE.txt linux_temp/addons/ffmpeg/
+              cp ${{ github.workspace }}/addons/ffmpeg/linux/*.txt linux_temp/addons/ffmpeg/linux/ 2>/dev/null || true
               ls -lh linux_temp/addons/ffmpeg/linux/
 
               rm -f "$archive"
@@ -141,6 +152,10 @@ jobs:
 
               mkdir -p windows_temp/addons/ffmpeg/windows/
               cp ${{ github.workspace }}/addons/ffmpeg/windows/ffmpeg.exe windows_temp/addons/ffmpeg/windows/
+              # Copy license files
+              cp ${{ github.workspace }}/addons/ffmpeg/FFMPEG_LICENSE.txt windows_temp/addons/ffmpeg/
+              cp ${{ github.workspace }}/addons/ffmpeg/windows/*.txt windows_temp/addons/ffmpeg/windows/ 2>/dev/null || true
+              cp ${{ github.workspace }}/addons/ffmpeg/windows/LICENSE windows_temp/addons/ffmpeg/windows/ 2>/dev/null || true
               ls -lh windows_temp/addons/ffmpeg/windows/
 
               rm -f "$archive"
@@ -171,12 +186,19 @@ jobs:
                 mkdir -p "$APP_PATH/Contents/Resources/addons/ffmpeg/macos/"
                 cp ${{ github.workspace }}/addons/ffmpeg/macos/ffmpeg "$APP_PATH/Contents/Resources/addons/ffmpeg/macos/"
                 chmod +x "$APP_PATH/Contents/Resources/addons/ffmpeg/macos/ffmpeg"
+                # Copy license files
+                mkdir -p "$APP_PATH/Contents/Resources/addons/ffmpeg/"
+                cp ${{ github.workspace }}/addons/ffmpeg/FFMPEG_LICENSE.txt "$APP_PATH/Contents/Resources/addons/ffmpeg/"
+                cp ${{ github.workspace }}/addons/ffmpeg/macos/*.txt "$APP_PATH/Contents/Resources/addons/ffmpeg/macos/" 2>/dev/null || true
                 ls -lh "$APP_PATH/Contents/Resources/addons/ffmpeg/macos/"
               else
                 echo "WARNING: No .app bundle found, placing ffmpeg at root"
                 mkdir -p macos_temp/addons/ffmpeg/macos/
                 cp ${{ github.workspace }}/addons/ffmpeg/macos/ffmpeg macos_temp/addons/ffmpeg/macos/
                 chmod +x macos_temp/addons/ffmpeg/macos/ffmpeg
+                # Copy license files
+                cp ${{ github.workspace }}/addons/ffmpeg/FFMPEG_LICENSE.txt macos_temp/addons/ffmpeg/
+                cp ${{ github.workspace }}/addons/ffmpeg/macos/*.txt macos_temp/addons/ffmpeg/macos/ 2>/dev/null || true
               fi
 
               rm -f "$archive"
