@@ -1,0 +1,243 @@
+[gd_scene load_steps=3 format=3 uid="uid://s3dcelburk4n"]
+
+[ext_resource type="Script" uid="uid://dbkhg6me4iyn3" path="res://main.gd" id="1_ig7tw"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_7dm0k"]
+content_margin_left = 4.0
+content_margin_top = 0.0
+content_margin_right = 4.0
+content_margin_bottom = 0.0
+color = Color(1, 1, 1, 1)
+
+[node name="MainContainer" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ig7tw")
+
+[node name="ShaderPreviewContainer" type="Control" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Background" type="ColorRect" parent="ShaderPreviewContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WebView" type="WebView" parent="ShaderPreviewContainer"]
+full_window_size = false
+url = "https://www.shadertoy.com/browse"
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="ControlPanel" type="Control" parent="."]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ControlPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 152.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ControlPanel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="SettingsContainer" type="VBoxContainer" parent="ControlPanel/ScrollContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="URLContainer" type="HBoxContainer" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+layout_mode = 2
+
+[node name="URLLabel" type="Label" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/URLContainer"]
+layout_mode = 2
+text = "URL"
+
+[node name="URLInput" type="TextEdit" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/URLContainer"]
+custom_minimum_size = Vector2(0, 41.09)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="OpenShaderButton" type="Button" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+layout_mode = 2
+text = "Open shader"
+
+[node name="Separator1" type="HSeparator" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+custom_minimum_size = Vector2(0, 5.885)
+layout_mode = 2
+theme_override_constants/separation = 4
+theme_override_styles/separator = SubResource("StyleBoxLine_7dm0k")
+
+[node name="FrameSettingsLabel" type="Label" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+layout_mode = 2
+text = "Frame Settings"
+
+[node name="FrameSettingsContainer" type="VBoxContainer" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+layout_mode = 2
+
+[node name="FrameSettingsGrid" type="GridContainer" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/FrameSettingsContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="WidthLabel" type="Label" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/FrameSettingsContainer/FrameSettingsGrid"]
+layout_mode = 2
+text = "Width"
+
+[node name="WidthInput" type="TextEdit" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/FrameSettingsContainer/FrameSettingsGrid"]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1920"
+
+[node name="HeightLabel" type="Label" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/FrameSettingsContainer/FrameSettingsGrid"]
+layout_mode = 2
+text = "Height"
+
+[node name="HeightInput" type="TextEdit" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/FrameSettingsContainer/FrameSettingsGrid"]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1080"
+
+[node name="FPSLabel" type="Label" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/FrameSettingsContainer/FrameSettingsGrid"]
+layout_mode = 2
+text = "FPS"
+
+[node name="FPSInput" type="TextEdit" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/FrameSettingsContainer/FrameSettingsGrid"]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "60"
+
+[node name="StartLabel" type="Label" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/FrameSettingsContainer/FrameSettingsGrid"]
+layout_mode = 2
+text = "Start"
+
+[node name="StartInput" type="TextEdit" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/FrameSettingsContainer/FrameSettingsGrid"]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="DurationLabel" type="Label" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/FrameSettingsContainer/FrameSettingsGrid"]
+layout_mode = 2
+text = "Duration"
+
+[node name="DurationInput" type="TextEdit" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/FrameSettingsContainer/FrameSettingsGrid"]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "10"
+
+[node name="Separator2" type="HSeparator" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+custom_minimum_size = Vector2(0, 5.885)
+layout_mode = 2
+theme_override_constants/separation = 4
+theme_override_styles/separator = SubResource("StyleBoxLine_7dm0k")
+
+[node name="FileSettingsLabel" type="Label" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+layout_mode = 2
+text = "File Settings"
+
+[node name="SelectDirectoryButton" type="Button" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+layout_mode = 2
+text = "Select Directory"
+
+[node name="DirectoryDialog" type="FileDialog" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+oversampling_override = 1.0
+title = "Open a Directory"
+file_mode = 2
+use_native_dialog = true
+
+[node name="FileSettingsGrid" type="GridContainer" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="DirectoryLabel" type="Label" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/FileSettingsGrid"]
+layout_mode = 2
+text = "Directory"
+
+[node name="DirectoryPathLabel" type="Label" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/FileSettingsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text_overrun_behavior = 3
+
+[node name="Separator3" type="HSeparator" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+custom_minimum_size = Vector2(0, 5.885)
+layout_mode = 2
+theme_override_constants/separation = 4
+theme_override_styles/separator = SubResource("StyleBoxLine_7dm0k")
+
+[node name="VideoSettingsLabel" type="Label" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+layout_mode = 2
+text = "Video Settings"
+
+[node name="VideoFormatContainer" type="HBoxContainer" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+layout_mode = 2
+
+[node name="MP4CheckBox" type="CheckBox" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/VideoFormatContainer"]
+layout_mode = 2
+button_pressed = true
+text = "MP4"
+
+[node name="GIFCheckBox" type="CheckBox" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/VideoFormatContainer"]
+layout_mode = 2
+text = "GIF"
+
+[node name="CRFLabel" type="Label" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+layout_mode = 2
+text = "CRF"
+
+[node name="CRFInput" type="TextEdit" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "20"
+
+[node name="ExportButton" type="Button" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+layout_mode = 2
+text = "Export"
+
+[node name="Separator4" type="HSeparator" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+custom_minimum_size = Vector2(0, 5.885)
+layout_mode = 2
+theme_override_constants/separation = 4
+theme_override_styles/separator = SubResource("StyleBoxLine_7dm0k")
+
+[node name="StatusLabel" type="Label" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+layout_mode = 2
+text = "Ready"
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+show_percentage = false
+
+[node name="ProgressLabel" type="Label" parent="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[connection signal="pressed" from="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/SelectDirectoryButton" to="ControlPanel/ScrollContainer/MarginContainer/SettingsContainer/DirectoryDialog" method="show"]

@@ -1,0 +1,73 @@
+name: Export Godot Game
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  export_game:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    name: Export Game with Bundled FFmpeg
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download and Bundle FFmpeg for Linux
+        run: |
+          # Download ffmpeg for Linux
+          wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
+          tar xf ffmpeg-release-amd64-static.tar.xz
+          cp ffmpeg-*-amd64-static/ffmpeg addons/ffmpeg/linux/
+          chmod +x addons/ffmpeg/linux/ffmpeg
+          rm -rf ffmpeg-release-amd64-static.tar.xz ffmpeg-*-amd64-static
+          echo "Linux ffmpeg bundled"
+
+      - name: Download and Bundle FFmpeg for Windows
+        run: |
+          # Download ffmpeg for Windows
+          wget https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
+          unzip -q ffmpeg-release-essentials.zip
+          cp ffmpeg-*-essentials_build/bin/ffmpeg.exe addons/ffmpeg/windows/
+          rm -rf ffmpeg-release-essentials.zip ffmpeg-*-essentials_build
+          echo "Windows ffmpeg bundled"
+
+      - name: Download and Bundle FFmpeg for macOS
+        run: |
+          # Download ffmpeg for macOS (Intel + Apple Silicon universal binary)
+          wget https://evermeet.cx/ffmpeg/ffmpeg-7.1.zip
+          unzip -q ffmpeg-7.1.zip
+          mv ffmpeg addons/ffmpeg/macos/
+          chmod +x addons/ffmpeg/macos/ffmpeg
+          rm -rf ffmpeg-7.1.zip
+          echo "macOS ffmpeg bundled"
+
+      - name: Verify FFmpeg Binaries
+        run: |
+          echo "Checking bundled ffmpeg files:"
+          ls -lh addons/ffmpeg/linux/
+          ls -lh addons/ffmpeg/windows/
+          ls -lh addons/ffmpeg/macos/
+
+      - name: Export Game
+        id: export
+        uses: firebelley/godot-export@v7.0.0
+        with:
+          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.5/Godot_v4.5-stable_linux.x86_64.zip
+          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.5/Godot_v4.5-stable_export_templates.tpz
+          relative_project_path: ./
+          archive_output: true
+          cache: true
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1.18.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          generateReleaseNotes: true
+          tag: ${{ github.ref_name }}
+          artifacts: ${{ steps.export.outputs.archive_directory }}/*
+          draft: false
+          prerelease: false
