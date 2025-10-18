@@ -75,46 +75,6 @@ The app will use system-installed ffmpeg during development. For distribution, f
 
 **FFmpeg not found**: The bundled version should work automatically; for development, install ffmpeg system-wide
 
-## Project Structure
-
-```
-.
-├── addons/
-│   ├── godot_wry/            # WebView extension for embedded browser
-│   └── ffmpeg/               # Platform-specific ffmpeg binaries
-│       ├── linux/            # Linux x86_64 static binary
-│       ├── windows/          # Windows x86_64 executable
-│       └── macos/            # macOS universal binary
-├── .github/
-│   └── workflows/
-│       └── godot-export.yml  # GitHub Actions for automated builds
-├── ExportManager.gd          # Handles frame capture and video export
-├── ShadertoyController.gd    # JavaScript injection and shader control
-├── SettingsManager.gd        # Settings persistence
-├── main.gd                   # Main UI controller
-├── main.tscn                 # Main scene with UI layout
-├── export_presets.cfg        # Export configuration for all platforms
-└── project.godot             # Godot project configuration
-```
-
-## Automated Releases
-
-This project uses GitHub Actions to automatically build releases with bundled ffmpeg for all platforms.
-
-### Creating a Release
-
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-The workflow will automatically:
-1. Download platform-specific ffmpeg binaries
-2. Export the project for Linux, Windows, and macOS
-3. Create a GitHub release with all builds
-
-See [.github/README.md](.github/README.md) for detailed workflow documentation.
-
 ## How It Works
 
 1. **WebView Integration**: Uses [godot-wry](https://github.com/doceazedo/godot-wry) to embed Chromium in Godot
@@ -128,6 +88,22 @@ See [.github/README.md](.github/README.md) for detailed workflow documentation.
 - **Godot 4.5**: Game engine and UI framework
 - **godot-wry**: WebView extension for browser embedding
 - **FFmpeg**: Video encoding (automatically bundled in releases)
+
+## 💖 Support Me
+Hi! I’m krazyjakee 🎮, creator and maintain­er of the *NodotProject* - a suite of open‑source Godot tools (e.g. Nodot, Gedis, GedisQueue etc) that empower game developers to build faster and maintain cleaner code.
+
+I’m looking for sponsors to help sustain and grow the project: more dev time, better docs, more features, and deeper community support. Your support means more stable, polished tools used by indie makers and studios alike.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/krazyjakee)
+
+Every contribution helps maintain and improve this project. And encourage me to make more projects like this!
+
+*This is optional support. The tool remains free and open-source regardless.*
+
+---
+
+**Created with ❤️ for Godot Developers**  
+For contributions, please open PRs on GitHub
 
 ## License
 
