@@ -119,6 +119,14 @@ func finish_export():
 	print("Frame capture complete!")
 	status_changed.emit("Frame capture complete!")
 
+	# Wait for all pending frame writes to complete
+	while pending_writes > 0:
+		status_changed.emit("Waiting for %d frames to finish writing..." % pending_writes)
+		await get_tree().process_frame
+
+	print("All frames written to disk")
+	status_changed.emit("All frames written to disk")
+
 	# Restore shader state
 	shadertoy_controller.restore_shader_state()
 
@@ -241,13 +249,18 @@ func _compile_video():
 
 		var ffmpeg_path = _get_ffmpeg_path()
 		print("Running ffmpeg for MP4...")
-		var mp4_result = OS.execute(ffmpeg_path, mp4_args, [], true)
+		print("Command: %s %s" % [ffmpeg_path, " ".join(mp4_args)])
+		var output: Array = []
+		var mp4_result = OS.execute(ffmpeg_path, mp4_args, output, true)
 		if mp4_result == 0:
 			print("MP4 created: ", output_mp4)
 			video_created = true
 		else:
-			push_error("ffmpeg failed for MP4")
-			status_changed.emit("Error: ffmpeg failed for MP4")
+			var error_msg = "ffmpeg failed for MP4 with exit code %d" % mp4_result
+			if output.size() > 0:
+				error_msg += "\nOutput: " + "\n".join(output)
+			push_error(error_msg)
+			status_changed.emit("Error: ffmpeg failed for MP4 (code %d)" % mp4_result)
 
 	# Compile GIF
 	if export_settings.gif_enabled:
@@ -265,13 +278,18 @@ func _compile_video():
 
 		var ffmpeg_path = _get_ffmpeg_path()
 		print("Running ffmpeg for GIF...")
-		var gif_result = OS.execute(ffmpeg_path, gif_args, [], true)
+		print("Command: %s %s" % [ffmpeg_path, " ".join(gif_args)])
+		var output: Array = []
+		var gif_result = OS.execute(ffmpeg_path, gif_args, output, true)
 		if gif_result == 0:
 			print("GIF created: ", output_gif)
 			video_created = true
 		else:
-			push_error("ffmpeg failed for GIF")
-			status_changed.emit("Error: ffmpeg failed for GIF")
+			var error_msg = "ffmpeg failed for GIF with exit code %d" % gif_result
+			if output.size() > 0:
+				error_msg += "\nOutput: " + "\n".join(output)
+			push_error(error_msg)
+			status_changed.emit("Error: ffmpeg failed for GIF (code %d)" % gif_result)
 
 	# Delete PNG frames after successful video creation
 	if video_created:
