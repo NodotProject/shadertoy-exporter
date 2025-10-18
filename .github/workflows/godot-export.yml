@@ -21,10 +21,21 @@ jobs:
         uses: actions/cache@v4
         with:
           path: addons/ffmpeg
-          key: ffmpeg-${{ runner.os }}-linux-7.1-windows-7.1-macos-7.1
+          key: ffmpeg-${{ runner.os }}-linux-7.1-windows-7.1-macos-7.1-v2
+
+      - name: Check if FFmpeg binaries exist
+        id: check-ffmpeg
+        run: |
+          if [ -f "addons/ffmpeg/linux/ffmpeg" ] && [ -f "addons/ffmpeg/windows/ffmpeg.exe" ] && [ -f "addons/ffmpeg/macos/ffmpeg" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "All FFmpeg binaries found in cache"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "FFmpeg binaries missing, will download"
+          fi
 
       - name: Download and Bundle FFmpeg for Linux
-        if: steps.cache-ffmpeg.outputs.cache-hit != 'true'
+        if: steps.check-ffmpeg.outputs.exists != 'true'
         run: |
           # Download ffmpeg for Linux
           wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
@@ -35,7 +46,7 @@ jobs:
           echo "Linux ffmpeg bundled"
 
       - name: Download and Bundle FFmpeg for Windows
-        if: steps.cache-ffmpeg.outputs.cache-hit != 'true'
+        if: steps.check-ffmpeg.outputs.exists != 'true'
         run: |
           # Download ffmpeg for Windows
           wget https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
@@ -45,7 +56,7 @@ jobs:
           echo "Windows ffmpeg bundled"
 
       - name: Download and Bundle FFmpeg for macOS
-        if: steps.cache-ffmpeg.outputs.cache-hit != 'true'
+        if: steps.check-ffmpeg.outputs.exists != 'true'
         run: |
           # Download ffmpeg for macOS (Intel + Apple Silicon universal binary)
           wget https://evermeet.cx/ffmpeg/ffmpeg-7.1.zip
