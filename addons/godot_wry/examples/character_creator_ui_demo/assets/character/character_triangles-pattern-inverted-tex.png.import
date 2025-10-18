@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ceskjpclp4gr0"
 path.s3tc="res://.godot/imported/character_triangles-pattern-inverted-tex.png-95acb624222a84d95df01534b14e38f0.s3tc.ctex"
+path.etc2="res://.godot/imported/character_triangles-pattern-inverted-tex.png-95acb624222a84d95df01534b14e38f0.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://addons/godot_wry/examples/character_creator_ui_demo/assets/character/character_triangles-pattern-inverted-tex.png"
-dest_files=["res://.godot/imported/character_triangles-pattern-inverted-tex.png-95acb624222a84d95df01534b14e38f0.s3tc.ctex"]
+dest_files=["res://.godot/imported/character_triangles-pattern-inverted-tex.png-95acb624222a84d95df01534b14e38f0.s3tc.ctex", "res://.godot/imported/character_triangles-pattern-inverted-tex.png-95acb624222a84d95df01534b14e38f0.etc2.ctex"]
 
 [params]
 

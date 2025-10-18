@@ -18,12 +18,12 @@ config/icon="uid://ba0k2ad7jxdvh"
 [display]
 
 window/size/viewport_height=800
-window/stretch/aspect="ignore"
+window/dpi/allow_hidpi=false
 window/vsync/vsync_mode=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gut/plugin.cfg")
+enabled=PackedStringArray()
 
 [input]
 
