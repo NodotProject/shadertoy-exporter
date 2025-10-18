@@ -96,42 +96,65 @@ jobs:
           echo "Adding ffmpeg binaries to release archives..."
           cd ${{ steps.export.outputs.archive_directory }}
 
+          echo "Current directory contents:"
+          ls -lh
+
           # Process Linux archive
           if [ -f "linux.zip" ]; then
             echo "Processing Linux archive..."
             unzip -q linux.zip -d linux_temp
+            echo "Contents of linux_temp:"
+            ls -la linux_temp/
             mkdir -p linux_temp/addons/ffmpeg/linux/
             cp ${{ github.workspace }}/addons/ffmpeg/linux/ffmpeg linux_temp/addons/ffmpeg/linux/
             chmod +x linux_temp/addons/ffmpeg/linux/ffmpeg
-            cd linux_temp && zip -r -q ../linux.zip . && cd ..
+            echo "FFmpeg added to linux_temp, re-zipping..."
+            rm -f linux.zip
+            cd linux_temp && zip -r ../linux.zip . && cd ..
             rm -rf linux_temp
             echo "Linux archive updated"
+            echo "New linux.zip size:"
+            ls -lh linux.zip
           fi
 
           # Process Windows archive
           if [ -f "windows.zip" ]; then
             echo "Processing Windows archive..."
             unzip -q windows.zip -d windows_temp
+            echo "Contents of windows_temp:"
+            ls -la windows_temp/
             mkdir -p windows_temp/addons/ffmpeg/windows/
             cp ${{ github.workspace }}/addons/ffmpeg/windows/ffmpeg.exe windows_temp/addons/ffmpeg/windows/
-            cd windows_temp && zip -r -q ../windows.zip . && cd ..
+            echo "FFmpeg added to windows_temp, re-zipping..."
+            rm -f windows.zip
+            cd windows_temp && zip -r ../windows.zip . && cd ..
             rm -rf windows_temp
             echo "Windows archive updated"
+            echo "New windows.zip size:"
+            ls -lh windows.zip
           fi
 
           # Process macOS archive
           if [ -f "macos.zip" ]; then
             echo "Processing macOS archive..."
             unzip -q macos.zip -d macos_temp
+            echo "Contents of macos_temp:"
+            ls -la macos_temp/
             mkdir -p "macos_temp/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/macos/"
             cp ${{ github.workspace }}/addons/ffmpeg/macos/ffmpeg "macos_temp/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/macos/"
             chmod +x "macos_temp/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/macos/ffmpeg"
-            cd macos_temp && zip -r -q ../macos.zip . && cd ..
+            echo "FFmpeg added to macos_temp, re-zipping..."
+            rm -f macos.zip
+            cd macos_temp && zip -r ../macos.zip . && cd ..
             rm -rf macos_temp
             echo "macOS archive updated"
+            echo "New macos.zip size:"
+            ls -lh macos.zip
           fi
 
           echo "All archives updated with ffmpeg binaries"
+          echo "Final archive directory contents:"
+          ls -lh
 
       - name: Create Release
         uses: ncipollo/release-action@v1.18.0
