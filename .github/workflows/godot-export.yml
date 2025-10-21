@@ -81,12 +81,11 @@ jobs:
       - name: Export Game for ${{ matrix.preset }}
         uses: NodotProject/godot-export@v1
         with:
-          godot_version: 4.5
-          godot_channel: stable
-          export_preset: ${{ matrix.preset }}
-          export_path: dist/${{ matrix.preset }}
-          custom_build: custom_build_profile.json
-          create_release: false
+          godot_executable_download_url: https://github.com/godotengine/godot/releases/download/4.5-stable/Godot_v4.5-stable_linux.x86_64.zip
+          godot_export_templates_download_url: https://github.com/godotengine/godot/releases/download/4.5-stable/Godot_v4.5-stable_export_templates.tpz
+          relative_export_path: dist/${{ matrix.preset }}
+          presets_to_export: ${{ matrix.preset }}
+          custom_build_profile_path: custom_build_profile.json
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
