@@ -78,31 +78,31 @@ jobs:
         with:
           godot_executable_download_url: https://github.com/godotengine/godot/releases/download/4.5-stable/Godot_v4.5-stable_linux.x86_64.zip
           godot_export_templates_download_url: https://github.com/godotengine/godot/releases/download/4.5-stable/Godot_v4.5-stable_export_templates.tpz
-          relative_export_path: dist/${{ matrix.preset.artifact }}
+          use_preset_export_path: true
           presets_to_export: ${{ matrix.preset.name }}
           custom_build_profile_path: custom_build_profile.json
 
       - name: Copy FFmpeg binary to exported build
         run: |
           if [ "${{ matrix.preset.artifact }}" = "linux" ]; then
-            mkdir -p dist/linux/addons/ffmpeg
-            cp addons/ffmpeg/linux/ffmpeg dist/linux/addons/ffmpeg/
-            cp addons/ffmpeg/FFMPEG_LICENSE.txt dist/linux/addons/ffmpeg/
+            mkdir -p builds/linux/addons/ffmpeg
+            cp addons/ffmpeg/linux/ffmpeg builds/linux/addons/ffmpeg/
+            cp addons/ffmpeg/FFMPEG_LICENSE.txt builds/linux/addons/ffmpeg/
           elif [ "${{ matrix.preset.artifact }}" = "windows" ]; then
-            mkdir -p dist/windows/addons/ffmpeg
-            cp addons/ffmpeg/windows/ffmpeg.exe dist/windows/addons/ffmpeg/
-            cp addons/ffmpeg/FFMPEG_LICENSE.txt dist/windows/addons/ffmpeg/
+            mkdir -p builds/windows/addons/ffmpeg
+            cp addons/ffmpeg/windows/ffmpeg.exe builds/windows/addons/ffmpeg/
+            cp addons/ffmpeg/FFMPEG_LICENSE.txt builds/windows/addons/ffmpeg/
           elif [ "${{ matrix.preset.artifact }}" = "macos" ]; then
-            mkdir -p "dist/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg"
-            cp addons/ffmpeg/macos/ffmpeg "dist/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/"
-            cp addons/ffmpeg/FFMPEG_LICENSE.txt "dist/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/"
+            mkdir -p "builds/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg"
+            cp addons/ffmpeg/macos/ffmpeg "builds/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/"
+            cp addons/ffmpeg/FFMPEG_LICENSE.txt "builds/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/"
           fi
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: shadertoy-exporter-${{ matrix.preset.artifact }}
-          path: dist/${{ matrix.preset.artifact }}
+          path: builds/${{ matrix.preset.artifact }}
           retention-days: 14
 
   create_release:
