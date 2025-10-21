@@ -85,17 +85,27 @@ jobs:
       - name: Copy FFmpeg binary to exported build
         run: |
           if [ "${{ matrix.preset.artifact }}" = "linux" ]; then
-            mkdir -p builds/linux/addons/ffmpeg
-            cp addons/ffmpeg/linux/ffmpeg builds/linux/addons/ffmpeg/
-            cp addons/ffmpeg/FFMPEG_LICENSE.txt builds/linux/addons/ffmpeg/
+            EXPORT_DIR=$(find builds/linux -mindepth 1 -maxdepth 1 -type d | head -1)
+            if [ -n "$EXPORT_DIR" ]; then
+              mkdir -p "$EXPORT_DIR/addons/ffmpeg"
+              cp addons/ffmpeg/linux/ffmpeg "$EXPORT_DIR/addons/ffmpeg/"
+              cp addons/ffmpeg/FFMPEG_LICENSE.txt "$EXPORT_DIR/addons/ffmpeg/"
+              chmod +x "$EXPORT_DIR/addons/ffmpeg/ffmpeg"
+            fi
           elif [ "${{ matrix.preset.artifact }}" = "windows" ]; then
-            mkdir -p builds/windows/addons/ffmpeg
-            cp addons/ffmpeg/windows/ffmpeg.exe builds/windows/addons/ffmpeg/
-            cp addons/ffmpeg/FFMPEG_LICENSE.txt builds/windows/addons/ffmpeg/
+            EXPORT_DIR=$(find builds/windows -mindepth 1 -maxdepth 1 -type d | head -1)
+            if [ -n "$EXPORT_DIR" ]; then
+              mkdir -p "$EXPORT_DIR/addons/ffmpeg"
+              cp addons/ffmpeg/windows/ffmpeg.exe "$EXPORT_DIR/addons/ffmpeg/"
+              cp addons/ffmpeg/FFMPEG_LICENSE.txt "$EXPORT_DIR/addons/ffmpeg/"
+            fi
           elif [ "${{ matrix.preset.artifact }}" = "macos" ]; then
-            mkdir -p "builds/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg"
-            cp addons/ffmpeg/macos/ffmpeg "builds/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/"
-            cp addons/ffmpeg/FFMPEG_LICENSE.txt "builds/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/"
+            APP_PATH=$(find builds/macos -name "*.app" -type d | head -1)
+            if [ -n "$APP_PATH" ]; then
+              mkdir -p "$APP_PATH/Contents/Resources/addons/ffmpeg"
+              cp addons/ffmpeg/macos/ffmpeg "$APP_PATH/Contents/Resources/addons/ffmpeg/"
+              cp addons/ffmpeg/FFMPEG_LICENSE.txt "$APP_PATH/Contents/Resources/addons/ffmpeg/"
+            fi
           fi
 
       - name: Upload Artifacts
