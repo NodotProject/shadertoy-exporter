@@ -7,31 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  # Prepare custom build profile for minified exports
-  prepare-build:
-    runs-on: ubuntu-latest
-    name: Generate Custom Build Profile
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-
-      - name: Generate custom build profile
-        run: python custom_build.py
-
-      - name: Upload custom build profile
-        uses: actions/upload-artifact@v4
-        with:
-          name: custom-build-profile
-          path: custom_build_profile.json
-          retention-days: 1
-
   export_game:
-    needs: prepare-build
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -45,11 +21,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Download custom build profile
-        uses: actions/download-artifact@v4
-        with:
-          name: custom-build-profile
 
       - name: Cache FFmpeg Binaries
         id: cache-ffmpeg
