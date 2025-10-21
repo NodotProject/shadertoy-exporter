@@ -105,6 +105,8 @@ jobs:
               mkdir -p "$APP_PATH/Contents/Resources/addons/ffmpeg"
               cp addons/ffmpeg/macos/ffmpeg "$APP_PATH/Contents/Resources/addons/ffmpeg/"
               cp addons/ffmpeg/FFMPEG_LICENSE.txt "$APP_PATH/Contents/Resources/addons/ffmpeg/"
+              chmod +x "$APP_PATH/Contents/MacOS/"*
+              chmod +x "$APP_PATH/Contents/Resources/addons/ffmpeg/ffmpeg"
             fi
           fi
 
