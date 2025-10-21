@@ -73,14 +73,6 @@ jobs:
           chmod +x ffmpeg
           rm ffmpeg.zip
 
-      - name: Copy FFmpeg License Files
-        run: |
-          mkdir -p dist/linux dist/windows dist/macos
-          # Copy license files to all dist directories
-          for platform in linux windows macos; do
-            cp -r addons/ffmpeg/licenses dist/$platform/ 2>/dev/null || true
-          done
-
       - name: Export Game for ${{ matrix.preset.name }}
         uses: NodotProject/godot-export@v1
         with:
@@ -89,6 +81,22 @@ jobs:
           relative_export_path: dist/${{ matrix.preset.artifact }}
           presets_to_export: ${{ matrix.preset.name }}
           custom_build_profile_path: custom_build_profile.json
+
+      - name: Copy FFmpeg binary to exported build
+        run: |
+          if [ "${{ matrix.preset.artifact }}" = "linux" ]; then
+            mkdir -p dist/linux/addons/ffmpeg
+            cp addons/ffmpeg/linux/ffmpeg dist/linux/addons/ffmpeg/
+            cp addons/ffmpeg/FFMPEG_LICENSE.txt dist/linux/addons/ffmpeg/
+          elif [ "${{ matrix.preset.artifact }}" = "windows" ]; then
+            mkdir -p dist/windows/addons/ffmpeg
+            cp addons/ffmpeg/windows/ffmpeg.exe dist/windows/addons/ffmpeg/
+            cp addons/ffmpeg/FFMPEG_LICENSE.txt dist/windows/addons/ffmpeg/
+          elif [ "${{ matrix.preset.artifact }}" = "macos" ]; then
+            mkdir -p "dist/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg"
+            cp addons/ffmpeg/macos/ffmpeg "dist/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/"
+            cp addons/ffmpeg/FFMPEG_LICENSE.txt "dist/macos/shadertoy-exporter.app/Contents/Resources/addons/ffmpeg/"
+          fi
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
