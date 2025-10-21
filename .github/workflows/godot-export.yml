@@ -107,9 +107,9 @@ jobs:
           done
 
       - name: Export Game for ${{ matrix.preset }}
-        uses: NodotProject/godot-export@v2
+        uses: NodotProject/godot-export@v1
         with:
-          godot_version: 4.3
+          godot_version: 4.5
           godot_channel: stable
           export_preset: ${{ matrix.preset }}
           export_path: dist/${{ matrix.preset }}

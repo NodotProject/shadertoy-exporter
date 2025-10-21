@@ -16,7 +16,7 @@ A Godot 4.5 application that exports Shadertoy shaders to high-quality video (MP
 
 ## Quick Start
 
-1. **Download the latest release** from the [Releases](https://github.com/YOUR_USERNAME/shadertoy-exporter/releases) page
+1. **Download the latest release** from the [Releases](https://github.com/NodotProject/shadertoy-exporter/releases) page
 2. **Extract and run** the executable for your platform
 3. **Browse to a Shadertoy shader** (e.g., https://www.shadertoy.com/view/XsX3RB)
 4. **Click "Open Shader"** to load it
