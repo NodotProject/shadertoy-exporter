@@ -15,9 +15,12 @@ jobs:
     strategy:
       matrix:
         preset:
-          - linux
-          - windows
-          - macos
+          - name: "Linux/X11"
+            artifact: linux
+          - name: "Windows Desktop"
+            artifact: windows
+          - name: "macOS"
+            artifact: macos
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -78,20 +81,20 @@ jobs:
             cp -r addons/ffmpeg/licenses dist/$platform/ 2>/dev/null || true
           done
 
-      - name: Export Game for ${{ matrix.preset }}
+      - name: Export Game for ${{ matrix.preset.name }}
         uses: NodotProject/godot-export@v1
         with:
           godot_executable_download_url: https://github.com/godotengine/godot/releases/download/4.5-stable/Godot_v4.5-stable_linux.x86_64.zip
           godot_export_templates_download_url: https://github.com/godotengine/godot/releases/download/4.5-stable/Godot_v4.5-stable_export_templates.tpz
-          relative_export_path: dist/${{ matrix.preset }}
-          presets_to_export: ${{ matrix.preset }}
+          relative_export_path: dist/${{ matrix.preset.artifact }}
+          presets_to_export: ${{ matrix.preset.name }}
           custom_build_profile_path: custom_build_profile.json
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: shadertoy-exporter-${{ matrix.preset }}
-          path: dist/${{ matrix.preset }}
+          name: shadertoy-exporter-${{ matrix.preset.artifact }}
+          path: dist/${{ matrix.preset.artifact }}
           retention-days: 14
 
   create_release:
